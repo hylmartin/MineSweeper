@@ -39,6 +39,7 @@ public abstract class BaseCell extends View{
         if(value == -1) {
             isBomb = true;
         }
+        this.value = value;
     }
 
     public boolean isBomb() {
@@ -53,8 +54,9 @@ public abstract class BaseCell extends View{
         return isOpened;
     }
 
-    public void setOpened(boolean opened) {
-        isOpened = opened;
+    public void setOpened() {
+        isOpened = true;
+        invalidate();
     }
 
     public boolean isChecked() {
@@ -99,7 +101,7 @@ public abstract class BaseCell extends View{
 
     public void setPosition(int position) {
         this.position = position;
-        x = position % Game.height;
+        x = position % Game.width;
         y = position / Game.width;
         invalidate();
     }

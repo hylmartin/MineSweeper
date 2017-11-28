@@ -1,25 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="16dp"
-    android:paddingTop="16dp"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
-    tools:context="com.example.martinhyl.minesweeper.MainActivity">
+    android:paddingTop="16dp"
+    tools:context="com.example.martinhyl.minesweeper.MainActivity"
+    android:weightSum="1">
 
-    <TextView
-        android:id="@+id/textView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Manazeris" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:weightSum="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <TextView
+                android:id="@+id/levelTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Level:" />
+
+            <Spinner
+                android:id="@+id/levelSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.33"
+                android:entries="@array/spinnerLevelItems" />
+
+            <Button
+                android:id="@+id/restartButton"
+                android:layout_width="wrap_content"
+                android:layout_height="37dp"
+                android:onClick="restartGame"
+                android:text="Restart"
+                android:textAlignment="textEnd" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Switch
+                android:id="@+id/switchFlagMode"
+                android:layout_width="wrap_content"
+                android:layout_height="37dp"
+                android:text="Flag mode" />
+
+            <TextView
+                android:id="@+id/timeTextView"
+                android:layout_width="117dp"
+                android:layout_height="wrap_content"
+                android:text="00:00"
+                android:textAlignment="center" />
+        </LinearLayout>
+    </LinearLayout>
+
     <com.example.martinhyl.minesweeper.grid.Grid
         android:id="@+id/mineGridView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true">
+        android:layout_centerHorizontal="true" />
 
-    </com.example.martinhyl.minesweeper.grid.Grid>
-</RelativeLayout>
+</LinearLayout>
