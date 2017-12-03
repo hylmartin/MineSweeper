@@ -1,6 +1,10 @@
 package com.example.martinhyl.minesweeper;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.media.MediaPlayer;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.view.View;
 import android.widget.Toast;
 
@@ -19,6 +23,9 @@ public class Game {
     public static int height = 8;
     public static int level = 1;
     public static boolean flagMode = false;
+    public Vibrator vibrator;
+    public MediaPlayer mp;
+    private DB db;
 
     private Cell[][] grid = new Cell[width][height];
 
@@ -30,12 +37,15 @@ public class Game {
     }
 
     public void createBoard(Context context) {
+        vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        mp = MediaPlayer.create(context,R.raw.explosion);
         this.context = context;
 
         grid = new Cell[width][height];
         Board board = new Board(mines,width,height);
         setGrid(context,board.getBoard());
 
+        db = new DB(context);
 
     }
 
@@ -63,7 +73,7 @@ public class Game {
     }
 
     public void click(int xPos, int yPos) {
-        if(xPos >= 0 && yPos >= 0 && xPos < width && yPos < height && !getCellAt(xPos,yPos).isChecked()) {
+        if(xPos >= 0 && yPos >= 0 && xPos < width && yPos < height && !getCellAt(xPos,yPos).isChecked() && running) {
             getCellAt(xPos, yPos).setChecked();
 
             if(getCellAt(xPos, yPos).getValue() == 0) {
@@ -98,15 +108,25 @@ public class Game {
             }
         }
         if(notOpened == bombNotFound) {
-            Toast.makeText(context,"GameWON",Toast.LENGTH_SHORT).show();
+
             Game.running = false;
+
+            Cursor rs = db.getData(level);
+            rs.moveToFirst();
+            int leaderTime = rs.getInt(rs.getColumnIndex(DB.CONTACTS_COLUMN_TIME));
+
+            if(MainActivity.seconds < leaderTime)
+            {
+                db.updateLeader(level,MainActivity.playerName,MainActivity.seconds);
+            }
+
         }
 
         return true;
     }
 
     private void gameOver() {
-        Toast.makeText(context,"LOST",Toast.LENGTH_SHORT).show();
+        Toast.makeText(context,"LOST",Toast.LENGTH_LONG).show();
 
         for(int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
@@ -115,13 +135,19 @@ public class Game {
             }
         }
         Game.running = false;
+        if(MainActivity.vibration)
+            vibrator.vibrate(500);
+        if(MainActivity.sound)
+            mp.start();
+
     }
 
     public void flag(int xPos, int yPos) {
-        boolean isFlagged = getCellAt(xPos, yPos).isFlagged();
-        getCellAt(xPos, yPos).setFlagged(!isFlagged);
-        getCellAt(xPos, yPos).invalidate();
-
+        if (running && !getCellAt(xPos,yPos).isOpened()) {
+            boolean isFlagged = getCellAt(xPos, yPos).isFlagged();
+            getCellAt(xPos, yPos).setFlagged(!isFlagged);
+            getCellAt(xPos, yPos).invalidate();
+        }
     }
 
 

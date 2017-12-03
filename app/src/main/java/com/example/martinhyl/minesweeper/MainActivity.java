@@ -1,8 +1,13 @@
 package com.example.martinhyl.minesweeper;
 
+import android.content.Intent;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
@@ -20,12 +25,18 @@ import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
     private static int level;
+    public static boolean sound;
+    public static boolean vibration;
+    public static String playerName;
     public Spinner spinner;
     public Grid grid;
     public Switch flagMode;
     public Timer T;
     public TextView timeTextView;
-    public int seconds = 0;
+    public static int seconds = 0;
+    Vibrator vibrator;
+    private DB db;
+
 
 
 
@@ -34,10 +45,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        playerName = "Roman";
+        vibration = false;
+        sound = false;
+
+        db = new DB(this);
+        vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         spinner = (Spinner) findViewById(R.id.levelSpinner);
         grid = (Grid) findViewById(R.id.mineGridView);
         flagMode = (Switch) findViewById(R.id.switchFlagMode);
         timeTextView = (TextView) findViewById(R.id.timeTextView);
+
         T =new Timer();
 
         Game.getInstance().createBoard(this);
@@ -78,6 +96,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+
+
     }
 
     public void restartGame(View view) {
@@ -108,8 +128,34 @@ public class MainActivity extends AppCompatActivity {
         grid.setNumColumns(Game.width);
         grid.invalidateViews();
 
-        Toast.makeText(getApplicationContext(), String.valueOf(level), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), String.valueOf(level), Toast.LENGTH_SHORT).show();
 
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.leaderboard)
+        {
+            Intent intent = new Intent(getApplicationContext(),Leaderboard.class);
+            startActivity(intent);
+
+        }
+
+        if (id == R.id.settings)
+        {
+            Intent intent = new Intent(getApplicationContext(),Settings.class);
+            startActivity(intent);
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
