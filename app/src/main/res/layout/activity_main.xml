@@ -37,14 +37,6 @@
                 android:layout_weight="0.33"
                 android:entries="@array/spinnerLevelItems" />
 
-            <Button
-                android:id="@+id/restartButton"
-                android:layout_width="wrap_content"
-                android:layout_height="37dp"
-                android:onClick="restartGame"
-                android:text="Restart"
-                android:textAlignment="textEnd" />
-
         </LinearLayout>
 
         <LinearLayout
@@ -63,6 +55,14 @@
                 android:layout_width="117dp"
                 android:layout_height="wrap_content"
                 android:text="00:00"
+                android:textAlignment="center" />
+
+            <Button
+                android:id="@+id/restartButton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:onClick="restartGame"
+                android:text="Restart"
                 android:textAlignment="center" />
         </LinearLayout>
     </LinearLayout>

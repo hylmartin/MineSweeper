@@ -1,5 +1,6 @@
 package com.example.martinhyl.minesweeper;
 
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -46,6 +47,12 @@ public class Settings extends AppCompatActivity {
         MainActivity.sound = soundSwitch.isChecked();
         MainActivity.vibration = vibrationSwitch.isChecked();
         MainActivity.playerName = String.valueOf(name.getText());
+
+        SharedPreferences.Editor editor = MainActivity.sharedPreferences.edit();
+        editor.putString("name",MainActivity.playerName);
+        editor.putBoolean("vibration",MainActivity.vibration);
+        editor.putBoolean("sound",MainActivity.sound);
+        editor.commit();
 
         onBackPressed();
     }

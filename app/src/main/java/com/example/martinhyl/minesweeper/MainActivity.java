@@ -1,6 +1,8 @@
 package com.example.martinhyl.minesweeper;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
@@ -36,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
     public static int seconds = 0;
     Vibrator vibrator;
     private DB db;
-
+    public static final String MySETTINGS = "MySettings";
+    public static SharedPreferences sharedPreferences;
 
 
 
@@ -45,9 +48,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        playerName = "Roman";
-        vibration = false;
-        sound = false;
+        sharedPreferences = getSharedPreferences(MySETTINGS, Context.MODE_PRIVATE);
+
+
+        playerName = sharedPreferences.getString("name","Roman");
+        vibration = sharedPreferences.getBoolean("vibration",false);
+        sound = sharedPreferences.getBoolean("sound",false);
 
         db = new DB(this);
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);

@@ -1,6 +1,8 @@
 package com.example.martinhyl.minesweeper;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.os.VibrationEffect;
@@ -118,6 +120,10 @@ public class Game {
             if(MainActivity.seconds < leaderTime)
             {
                 db.updateLeader(level,MainActivity.playerName,MainActivity.seconds);
+                showWinWindow(true);
+            }
+            else {
+                showWinWindow(false);
             }
 
         }
@@ -151,4 +157,22 @@ public class Game {
     }
 
 
+    public void showWinWindow(boolean isLeader) {
+        String tmp;
+        if(isLeader)
+            tmp = "You are new leader in this level";
+        else
+            tmp = "Your time is not the best in this level";
+        
+        AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+        alertDialog.setTitle("Win");
+        alertDialog.setMessage(tmp);
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
+    }
 }
